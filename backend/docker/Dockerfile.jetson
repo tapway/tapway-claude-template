@@ -1,0 +1,30 @@
+# =============================================================================
+# NVIDIA Jetson  (Orin / Xavier — aarch64, JetPack 6.x)
+# Build with:  docker buildx build --platform linux/arm64 ...
+# =============================================================================
+FROM nvcr.io/nvidia/l4t-pytorch:r36.2.0-pth2.1-py3 AS base
+
+# l4t-pytorch already ships Python 3.10 + CUDA + PyTorch
+# uv is installed on top; torch is NOT re-installed (use the pre-built l4t wheel)
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    UV_SYSTEM_PYTHON=1 \
+    UV_NO_BUILD_ISOLATION=1
+
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
+
+WORKDIR /app
+
+COPY pyproject.toml .
+# Skip torch/torchvision — already baked into the base image
+RUN uv sync --no-dev --no-install-project \
+    && uv pip install pyyaml
+
+COPY src/ src/
+COPY configs/ configs/
+
+RUN uv sync --no-dev
+
+EXPOSE 8080
+CMD ["uv", "run", "python", "src/main.py"]

@@ -1,0 +1,15 @@
+# GPU overlay — CUDA (any version)
+# Usage: docker compose -f docker-compose.yml -f docker/compose.cuda.yml up
+
+services:
+  app:
+    build:
+      dockerfile: docker/Dockerfile.cuda124   # swap to Dockerfile.cuda118 if needed
+    image: my-app:cuda124
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]

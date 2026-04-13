@@ -1,0 +1,45 @@
+# ─── Secrets ───────────────────────────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+.claude/settings.local.json
+
+# ─── Node / Next.js ────────────────────────────────────────────────────────
+node_modules/
+frontend/.next/
+frontend/out/
+frontend/coverage/
+frontend/.env*.local
+*.tsbuildinfo
+
+# ─── Python ────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+.uv/
+dist/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+coverage.xml
+test.db
+
+# ─── Docker ────────────────────────────────────────────────────────────────
+*.tar
+
+# ─── OS ────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ─── IDE ───────────────────────────────────────────────────────────────────
+.idea/
+.vscode/settings.json
+*.swp
+
+# ─── Logs ──────────────────────────────────────────────────────────────────
+*.log
+logs/

@@ -1,0 +1,14 @@
+# GPU overlay — AMD ROCm
+# Usage: docker compose -f docker-compose.yml -f docker/compose.rocm.yml up
+
+services:
+  app:
+    build:
+      dockerfile: docker/Dockerfile.rocm
+    image: my-app:rocm
+    devices:
+      - /dev/kfd
+      - /dev/dri
+    group_add:
+      - video
+      - render

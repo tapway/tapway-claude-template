@@ -1,0 +1,33 @@
+# =============================================================================
+# NVIDIA CUDA 12.4  (Ampere / Ada / Hopper — RTX 3xxx/4xxx, A100, H100)
+# =============================================================================
+FROM nvidia/cuda:12.4.1-cudnn-runtime-ubuntu22.04 AS base
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    UV_SYSTEM_PYTHON=1 \
+    DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        python3.11 python3.11-dev python3-pip ca-certificates \
+    && ln -sf /usr/bin/python3.11 /usr/bin/python3 \
+    && ln -sf /usr/bin/python3    /usr/bin/python \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
+
+WORKDIR /app
+
+# ── dependency layer ─────────────────────────────────────────────────────────
+COPY pyproject.toml .
+RUN uv sync --extra cuda124 --no-dev --no-install-project
+
+# ── application code ─────────────────────────────────────────────────────────
+COPY src/ src/
+COPY configs/ configs/
+
+RUN uv sync --extra cuda124 --no-dev
+
+EXPOSE 8080
+CMD ["uv", "run", "python", "src/main.py"]

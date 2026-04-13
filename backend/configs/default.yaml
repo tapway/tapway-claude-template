@@ -1,0 +1,16 @@
+# Default application configuration
+# Override values via environment variables or a local configs/local.yaml
+
+app:
+  name: "my-app"
+  version: "0.1.0"
+
+model:
+  # device is auto-detected; override with "cpu", "cuda", "cuda:1", etc.
+  device: "auto"
+  batch_size: 32
+  precision: "fp16"   # fp32 | fp16 | bf16
+
+server:
+  host: "0.0.0.0"
+  port: 8080

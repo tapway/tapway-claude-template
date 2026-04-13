@@ -1,0 +1,30 @@
+# =============================================================================
+# System (apt) packages required for development
+# =============================================================================
+# Install all at once:
+#   sudo apt update && sudo apt install -y $(grep -v '^#' scripts/apt-packages.txt | grep -v '^$')
+#
+# Note: uv itself is installed separately (not via apt):
+#   curl -LsSf https://astral.sh/uv/install.sh | sh
+# =============================================================================
+
+# Build toolchain — needed to compile any C extension (cryptography, psycopg2, etc.)
+build-essential
+
+# Git
+git
+
+# SSL / TLS — required by many Python packages at build time
+libssl-dev
+
+# FFI — required by cffi / cryptography
+libffi-dev
+
+# Python C headers — needed when building Python extensions from source
+python3-dev
+
+# curl — used in Dockerfile HEALTHCHECK and general scripting
+curl
+
+# PostgreSQL client headers — add if using psycopg2 (remove otherwise)
+# libpq-dev

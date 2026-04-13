@@ -1,0 +1,39 @@
+# =============================================================================
+# CPU-only image  (x86_64 and aarch64 / Raspberry Pi / generic ARM)
+# =============================================================================
+FROM python:3.11-slim AS base
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    UV_SYSTEM_PYTHON=1
+
+# Install system packages (see scripts/apt-packages.txt for the full list)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        build-essential \
+        curl \
+        libffi-dev \
+        libssl-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
+
+WORKDIR /app
+
+# ── dependency layer (cached unless pyproject.toml changes) ──────────────────
+COPY pyproject.toml .
+RUN uv sync --extra cpu --no-dev --no-install-project
+
+# ── application code ─────────────────────────────────────────────────────────
+COPY src/ src/
+COPY configs/ configs/
+
+RUN uv sync --extra cpu --no-dev
+
+EXPOSE 8080
+
+# Liveness probe — Docker restarts the container if this fails 3× in a row
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
+    CMD curl -f http://localhost:8080/health || exit 1
+
+CMD ["uv", "run", "python", "src/main.py"]

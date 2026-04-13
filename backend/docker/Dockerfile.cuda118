@@ -1,0 +1,30 @@
+# =============================================================================
+# NVIDIA CUDA 11.8  (Turing / Volta — RTX 20xx, T4, V100)
+# =============================================================================
+FROM nvidia/cuda:11.8.0-cudnn8-runtime-ubuntu22.04 AS base
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    UV_SYSTEM_PYTHON=1 \
+    DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        python3.11 python3.11-dev python3-pip ca-certificates \
+    && ln -sf /usr/bin/python3.11 /usr/bin/python3 \
+    && ln -sf /usr/bin/python3    /usr/bin/python \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
+
+WORKDIR /app
+
+COPY pyproject.toml .
+RUN uv sync --extra cuda118 --no-dev --no-install-project
+
+COPY src/ src/
+COPY configs/ configs/
+
+RUN uv sync --extra cuda118 --no-dev
+
+EXPOSE 8080
+CMD ["uv", "run", "python", "src/main.py"]
