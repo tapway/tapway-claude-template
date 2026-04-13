@@ -198,9 +198,9 @@ npm run lint         # ESLint + TypeScript check
 
 | Role | Name | Contact |
 |---|---|---|
-| Tech Lead | [Chee How] | [cheehow@gotapway.com] |
-| Product | [Jason Cham] | [jason.cham@itmax.com.my] |
-| DevOps | [Reaz] | [reaz@gotapway.com] |
+| Tech Lead | [Name] | [Slack/email] |
+| Product | [Name] | [Slack/email] |
+| DevOps | [Name] | [Slack/email] |
 
 ---
 
