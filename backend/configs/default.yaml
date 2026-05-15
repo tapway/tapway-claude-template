@@ -2,7 +2,7 @@
 # Override values via environment variables or a local configs/local.yaml
 
 app:
-  name: "my-app"
+  name: "[PROJECT_NAME]"
   version: "0.1.0"
 
 model:

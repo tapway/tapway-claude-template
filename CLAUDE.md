@@ -72,16 +72,22 @@
 │   │       ├── device.py       ← GPU detection helper
 │   │       └── security.py     ← JWT + bcrypt helpers
 │   ├── tests/
+│   │   ├── conftest.py          ← Shared fixtures (db_session, test client)
+│   │   ├── unit/                ← Mock-isolated unit tests
+│   │   └── integration/         ← Tests with real configs/subsystems
 │   ├── configs/
-│   │   └── default.yaml        ← App config (override via env vars)
-│   ├── docker/                 ← Multi-target Dockerfiles
-│   │   ├── Dockerfile.cpu
-│   │   ├── Dockerfile.cuda124
-│   │   ├── Dockerfile.cuda118
-│   │   ├── Dockerfile.rocm
-│   │   └── Dockerfile.jetson
+│   │   └── default.yaml         ← App config (override via env vars)
+│   ├── docker/                  ← Multi-target Dockerfiles + GPU compose overlays
+│   │   ├── Dockerfile.cpu       ← x86_64 + ARM, uv binary, Granian, HEALTHCHECK
+│   │   ├── Dockerfile.cuda124   ← NVIDIA CUDA 12.4 (RTX 3xxx/4xxx, A100, H100)
+│   │   ├── Dockerfile.cuda118   ← NVIDIA CUDA 11.8 (RTX 20xx, T4, V100)
+│   │   ├── Dockerfile.rocm      ← AMD ROCm 6 (RX 6xxx/7xxx, Instinct MI)
+│   │   ├── Dockerfile.jetson    ← Jetson Orin/Xavier (aarch64)
+│   │   ├── compose.cuda.yml     ← GPU overlay (CUDA)
+│   │   └── compose.rocm.yml     ← GPU overlay (ROCm)
 │   └── scripts/
-│       └── build.sh            ← One-command Docker build for any target
+│       ├── build.sh             ← One-command Docker build for any target
+│       └── apt-packages.txt     ← System packages devs/DevOps must install
 │
 ├── docs/                       ← Architecture, API reference, onboarding
 └── .github/workflows/          ← CI/CD pipelines
@@ -103,6 +109,9 @@
 | Tests | `pytest` | TDD — write the test first |
 
 ### Logging Rules (structlog)
+
+Always pass context as keyword arguments — never interpolate strings:
+
 ```python
 # ✅ GOOD — context as keyword arguments
 logger.info("user created", user_id=uid, email=email)
@@ -111,6 +120,26 @@ logger.error("payment failed", order_id=oid, exc_info=True)
 # ❌ BAD — never interpolate strings
 logger.info(f"user created: {uid}")
 ```
+
+Request-scoped context (e.g. in FastAPI middleware) — bind fields once, they appear on every subsequent log call:
+
+```python
+import structlog
+structlog.contextvars.bind_contextvars(request_id=req_id, user_id=uid)
+# ... handle request ...
+structlog.contextvars.clear_contextvars()
+```
+
+### Config Pattern
+- App defaults in `backend/configs/default.yaml`
+- Per-environment overrides via `local.yaml` or env vars
+- Engine loads config at startup: `Engine(config_path="configs/default.yaml")`
+
+### Docker Build Pattern
+- Multi-target: `cpu`, `cuda124`, `cuda118`, `rocm`, `jetson`
+- Build: `./scripts/build.sh <target>` or `make build TARGET=<target>`
+- GPU compose overlays: `docker compose -f docker-compose.yml -f docker/compose.cuda.yml up`
+- All images include HEALTHCHECK polling `GET /api/v1/health`
 
 ### Git Workflow
 - **Branch strategy:** `main` (prod) → `develop` → `feat/xxx`, `fix/xxx`, `chore/xxx`
@@ -121,7 +150,8 @@ logger.info(f"user created: {uid}")
 ### API Design
 - All routes versioned under `/api/v1/`
 - Every service must expose `/api/v1/health` (liveness) and `/api/v1/health/ready` (readiness)
-- Pydantic models for all inputs/outputs — no untyped dicts in route handlers
+- Health endpoints use Pydantic `BaseModel` responses — always typed
+- Readiness checks downstream deps (DB, cache); liveness stays dependency-free
 - Error responses always `{"detail": "message"}` format
 
 ### Security Rules
