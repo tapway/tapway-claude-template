@@ -1,3 +1,12 @@
+---
+name: security-audit
+description: >
+  Audit code touching auth, payments, user data, file uploads, external APIs,
+  admin functions, or database queries against the OWASP Top 10. Triggers
+  include "security review", "audit auth", "check for vulnerabilities",
+  "is this safe", "before we ship sensitive code".
+---
+
 # Skill: Security Audit
 
 **When to invoke:** Any code touching auth, payments, user data, file uploads, external APIs, admin functions, or database queries.

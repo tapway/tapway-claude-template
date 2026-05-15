@@ -1,3 +1,12 @@
+---
+name: git-worktrees
+description: >
+  Manage parallel git worktrees for concurrent feature development, long test
+  runs alongside coding, or hotfix work without losing main feature context.
+  Triggers include "worktree", "parallel branches", "isolate this work",
+  "hotfix without losing context".
+---
+
 # Skill: Git Worktrees
 
 **When to invoke:** Parallel feature development, running long tests while continuing to code, working on hotfix while main feature work is in progress.

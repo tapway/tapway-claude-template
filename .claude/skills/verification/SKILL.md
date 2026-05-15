@@ -1,3 +1,12 @@
+---
+name: verification
+description: >
+  Verify a task is actually complete before declaring done — no exceptions.
+  Run the relevant tests, lint, type-checks, and feature checks. Triggers
+  include "is this done", "verify", "before I mark complete", "final check",
+  "ready to ship".
+---
+
 # Skill: Verification Before Completion
 
 **When to invoke:** Before declaring ANY task complete. No exceptions.

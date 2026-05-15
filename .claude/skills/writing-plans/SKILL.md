@@ -1,3 +1,12 @@
+---
+name: writing-plans
+description: >
+  Write a structured implementation plan for any multi-step task (3+ files,
+  new feature, refactor, migration). Use after brainstorming and before
+  implementation. Triggers include "write a plan", "plan this", "design the
+  implementation", "break this down".
+---
+
 # Skill: Writing Plans
 
 **When to invoke:** Any multi-step task (3+ files, new feature, refactor, migration). After brainstorming, before implementation.

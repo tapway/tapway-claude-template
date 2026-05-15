@@ -1,3 +1,12 @@
+---
+name: tdd
+description: >
+  Test-Driven Development — write a failing test before any production code.
+  Use for every new feature, bug fix, refactor, or behavior change. The iron
+  law of this project. Triggers include "TDD", "write a test first", "new
+  feature", "bug fix", "behavior change".
+---
+
 # Skill: Test-Driven Development (TDD)
 
 **When to invoke:** Any new feature, bug fix, refactor, or behavior change. The iron law: no production code without a failing test first.

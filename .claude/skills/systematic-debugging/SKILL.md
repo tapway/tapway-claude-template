@@ -1,3 +1,12 @@
+---
+name: systematic-debugging
+description: >
+  Debug methodically — bug investigation, unexpected behavior, "works in
+  staging but not prod", error messages, flaky or failing tests. Triggers
+  include "debug", "why is X failing", "investigate this bug", "track down",
+  "it works locally but not in prod".
+---
+
 # Skill: Systematic Debugging
 
 **When to invoke:** Any bug investigation, unexpected behavior, "works in staging but not prod", error messages, failing tests.

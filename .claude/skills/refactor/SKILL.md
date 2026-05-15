@@ -1,3 +1,12 @@
+---
+name: refactor
+description: >
+  Improve code quality without changing behavior — remove duplication, simplify
+  complex functions, improve naming. Use for dedicated code-quality work or as
+  cleanup before a major feature build. Triggers include "refactor", "clean up",
+  "simplify", "remove duplication", "improve naming".
+---
+
 # Skill: Refactor
 
 **When to invoke:** Code quality improvements, removing duplication, simplifying complex functions, improving naming, before a major feature build.

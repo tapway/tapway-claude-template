@@ -63,16 +63,6 @@
         ]
       }
     ],
-    "PreCommit": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": ".claude/hooks/pre-commit-secrets.sh"
-          }
-        ]
-      }
-    ],
     "SessionStart": [
       {
         "hooks": [

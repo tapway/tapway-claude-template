@@ -1,3 +1,12 @@
+---
+name: brainstorming
+description: >
+  Explore approaches before writing code for a new feature, architecture decision,
+  or complex bug. Use when there is even a 1% chance multiple approaches exist.
+  Triggers include "let's brainstorm", "how should we approach", "what are the
+  options for", "before we code", or any exploratory design question.
+---
+
 # Skill: Brainstorming
 
 **When to invoke:** Before writing any code for a new feature, architecture decision, or complex bug. If there's even a 1% chance this applies, invoke it.

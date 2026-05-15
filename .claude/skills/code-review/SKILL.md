@@ -1,3 +1,12 @@
+---
+name: code-review
+description: >
+  Review code for quality, correctness, security, and adherence to project
+  conventions. Use before opening a PR, when asked to review code, or when
+  self-reviewing changes before committing. Triggers include "review this code",
+  "self-review", "PR review", "check my changes", "before I push".
+---
+
 # Skill: Code Review
 
 **When to invoke:** Before opening a PR, when asked to review code, when reviewing your own changes before committing.

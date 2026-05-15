@@ -1,3 +1,12 @@
+---
+name: subagent-driven-development
+description: >
+  Execute a written plan with 3+ tasks using isolated subagents per task for
+  maximum quality and parallelism. Use after the writing-plans skill, when
+  ready to implement a multi-task plan. Triggers include "delegate to
+  subagents", "spawn agents", "run this plan with subagents".
+---
+
 # Skill: Subagent-Driven Development
 
 **When to invoke:** You have a written plan (see `writing-plans` skill) with 3+ tasks, and want to execute it with maximum quality using isolated agents per task.

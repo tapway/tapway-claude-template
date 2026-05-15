@@ -46,8 +46,8 @@
 ├── CLAUDE.md                   ← Claude's memory (you are here)
 ├── .claude/                    ← Claude Code config
 │   ├── settings.json           ← Hooks, permissions, env
-│   └── commands/               ← Slash commands (/review, /deploy, etc.)
-├── skills/                     ← Auto-activated AI skills (superpowers)
+│   ├── commands/               ← Slash commands (/review, /deploy, etc.)
+│   └── skills/                 ← AI skills with frontmatter (Skill-tool invokable)
 ├── agents/                     ← Subagent definitions
 │
 ├── frontend/                   ← Next.js 14 app
@@ -180,6 +180,9 @@ npm run lint         # ESLint + TypeScript check
 | `git-worktrees` | Parallel feature development |
 | `security-audit` | Auth, payments, user data |
 | `refactor` | Code quality improvements |
+| `repo-docs` | Generating the standardized `docs/` folder (architecture, schema, deployment) at end of project |
+
+**Triggering a skill:** these activate automatically when a relevant phrase appears in conversation, and can also be invoked explicitly via the Skill tool by name. For example, `repo-docs` fires on *"document this repo"*, *"write architecture docs"*, *"/docs"*, or *"generate docs for this project"*. Skill files live in `.claude/skills/<name>/SKILL.md` — each carries YAML frontmatter (`name`, `description`) used for auto-discovery.
 
 ---
 
@@ -198,9 +201,9 @@ npm run lint         # ESLint + TypeScript check
 
 | Role | Name | Contact |
 |---|---|---|
-| Tech Lead | [Name] | [Slack/email] |
-| Product | [Name] | [Slack/email] |
-| DevOps | [Name] | [Slack/email] |
+| Tech Lead | [Chee How] | [cheehow@gotapway.com] |
+| Product | [Jason Cham] | [jason.cham@itmax.com.my] |
+| DevOps | [Reaz] | [reaz@gotapway.com] |
 
 ---
 
