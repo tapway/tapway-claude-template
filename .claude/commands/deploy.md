@@ -1,27 +1,47 @@
 # /deploy — Deployment Checklist
 
 Run through the pre-deployment checklist before shipping to production.
+Steps are generated dynamically based on the project's actual stack and
+deployment configuration.
 
-## Steps
+## Instructions
 
-1. **Check branch** — must be deploying from `main` or a release branch
-2. **Verify CI** — all GitHub Actions checks passing
-3. **Run tests** — `make test` in backend, `npm run test` in frontend
-4. **Check migrations** — any pending Alembic migrations? (`alembic current` vs `alembic heads`)
-5. **Review env vars** — confirm all required env vars are set in deployment target
-6. **Feature flags** — any flags that need to be enabled/disabled?
-7. **Rollback plan** — what's the rollback procedure if this fails?
-8. **Notify team** — post in #deployments Slack channel
+1. **Detect the project's deployment context** by reading:
+   - `CLAUDE.md` — the `## 🏗️ Tech Stack` section (hosting, CI/CD, containers)
+   - `Dockerfile` / `docker-compose.yml` — container build config
+   - `.github/workflows/` — CI/CD pipeline definitions
+   - Any `Dockerfile` variants (CPU, CUDA, ROCm, Jetson) — pick the right target
+   - `k8s/` or `helm/` directories — Kubernetes deployment configs
+   - `serverless.yml`, `amplify.yml`, `terraform/` — platform-specific configs
+   - `Makefile` — for build/test/ deploy targets
 
-## Output
+2. **Generate the checklist** covering these areas (only include what's
+   relevant to the detected stack):
 
-Produce a deployment summary card:
-```
+   - **Branch check** — deploying from `main` or a release branch?
+   - **CI status** — all GitHub Actions / CI checks passing?
+   - **Tests** — run the project's actual test suite (detect command from
+     Makefile, package.json, etc.)
+   - **Migrations** — check for pending database migrations using the actual
+     migration tool (Alembic, Prisma, Flyway, etc.)
+   - **Environment variables** — verify all required vars are set in the
+     deployment target environment
+   - **Docker build** — build the correct image variant (cpu/cuda/rocm/jetson)
+   - **Feature flags** — any flags to toggle?
+   - **Rollback plan** — git revert + redeploy, or platform-specific rollback
+
+3. **Output a deployment summary card** at the end.
+
+## Deployment Summary Format
+
+```markdown
 ## Deployment Summary
 - Branch: main @ [SHA]
+- Target: [e.g., AWS EKS / Railway / Vercel / Jetson Orin]
 - Tests: ✅ Passing
 - Migrations: [None / N pending]
-- Feature flags: [None changed]
-- Rollback: git revert [SHA] → redeploy
-- Notified: #deployments
+- Docker tag: [e.g., ghcr.io/org/service:cpu-latest]
+- Feature flags: [None changed / list changes]
+- Rollback: [git revert SHA → redeploy / helm rollback]
+- Notified: [#deployments channel]
 ```

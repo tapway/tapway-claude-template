@@ -211,6 +211,7 @@ npm run lint         # ESLint + TypeScript check
 | `security-audit` | Auth, payments, user data |
 | `refactor` | Code quality improvements |
 | `repo-docs` | Generating the standardized `docs/` folder (architecture, schema, deployment) at end of project |
+| `pre-review-cleanup` | Removing template artifacts before code review |
 
 **Triggering a skill:** these activate automatically when a relevant phrase appears in conversation, and can also be invoked explicitly via the Skill tool by name. For example, `repo-docs` fires on *"document this repo"*, *"write architecture docs"*, *"/docs"*, or *"generate docs for this project"*. Skill files live in `.claude/skills/<name>/SKILL.md` — each carries YAML frontmatter (`name`, `description`) used for auto-discovery.
 
