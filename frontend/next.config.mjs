@@ -1,10 +1,7 @@
-import type { NextConfig } from 'next'
-
-const nextConfig: NextConfig = {
-  // Enable strict mode for better React patterns
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   reactStrictMode: true,
 
-  // API proxy to backend in development
   async rewrites() {
     return [
       {
@@ -14,7 +11,6 @@ const nextConfig: NextConfig = {
     ]
   },
 
-  // Security headers
   async headers() {
     return [
       {

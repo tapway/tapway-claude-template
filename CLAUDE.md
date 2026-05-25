@@ -213,6 +213,49 @@ Skills and hooks activate immediately. For permissions and env settings, copy th
 
 ---
 
+## 🚀 Getting Started
+
+### Prerequisites
+- **Node.js** ≥ 20 LTS
+- **Python** ≥ 3.12
+- **uv** — `curl -LsSf https://astral.sh/uv/install.sh | sh`
+- **Docker Desktop**
+- **Claude Code** (recommended) — `npm i -g @anthropic-ai/claude-code`
+
+### First-Time Setup
+
+```bash
+# 1. Clone and configure
+git clone [REPO_URL]
+cd [PROJECT_NAME]
+cp .env.example .env          # Fill in secrets (ask tech lead)
+
+# 2. Start database
+docker compose up -d postgres
+
+# 3. Backend
+cd backend
+uv sync --all-extras
+make migrate
+make dev                      # http://localhost:8000
+
+# 4. Frontend (new terminal)
+cd frontend
+npm install
+npm run dev                   # http://localhost:3000
+```
+
+Verify: open http://localhost:8000/docs (Swagger UI) and http://localhost:3000 (app).
+
+### Common Issues
+
+| Problem | Solution |
+|---|---|
+| `DATABASE_URL` error | Check `.env` and that postgres is running |
+| Port 8000 in use | Kill the process on that port |
+| `uv sync` fails | Ensure Python 3.12+: `python --version` |
+| `npm install` fails | Ensure Node 20+: `node --version` |
+
 ## 🔄 Development Commands
 
 ```bash
@@ -244,6 +287,115 @@ npm run dev          # Start (http://localhost:3000)
 npm run test         # Run tests
 npm run lint         # ESLint + TypeScript check
 ```
+
+---
+
+## 🏛️ Architecture
+
+```
+Next.js 14 (Vercel)  ──HTTP──▶  FastAPI (Granian)  ──SQL──▶  PostgreSQL 16
+     Port 3000                       Port 8000                   Port 5432
+```
+
+### Key Design Decisions
+- **API:** RESTful, versioned under `/api/v1/`, JSON in/out, Pydantic for all schemas
+- **Auth:** JWT access tokens (15min) + refresh tokens (7 days), httpOnly cookies
+- **DB:** SQLAlchemy 2 async + Alembic migrations, UUID primary keys, `created_at`/`updated_at` on every model
+- **Frontend state:** React Query for all server state — never raw `fetch` in components
+- **Validation:** Zod (frontend), Pydantic (backend) — double-validate at the boundary
+
+### New Feature Workflow
+1. Write DB migration → 2. Pydantic schemas → 3. Service layer → 4. FastAPI route → 5. TypeScript types → 6. React Query hook → 7. UI component → 8. Tests at each layer
+
+### ADRs
+Significant technical decisions go in `docs/adr/`. See existing entries for format.
+
+---
+
+## UI Design Rules
+
+> **Golden Rule:** Every frontend page uses the admin dashboard shell. Never create standalone layouts unless explicitly asked.
+
+### Theme Reference
+
+`frontend/src/app/globals.css` is the single source of truth for all colors, fonts, shadows, and radii. All tokens are CSS variables in HSL format for shadcn/ui compatibility.
+
+| Token | Usage |
+|---|---|
+| `bg-primary` / `text-primary-foreground` | Lime green `#8DC63F` — CTAs, active states, primary buttons |
+| `bg-secondary` / `text-secondary-foreground` | Navy `#1E2D5A` — secondary elements |
+| `text-foreground` | Navy `#1E2D5A` (light) / Grey `#777777` (dark) — body text |
+| `text-muted-foreground` | `#777777` — captions, labels, metadata |
+| `bg-card` | White `#FFFFFF` (light) / Dark navy (dark) — card backgrounds |
+| `border-border` | `#E8E8E8` — borders, dividers |
+| `shadow-card` | `2px 4px 8px rgba(0,0,0,0.12)` — ALL cards and shapes |
+| `rounded-lg` | `0.3rem` — standard corner radius |
+| Font | Poppins — all text, all weights |
+
+### Layout Architecture
+
+- **Admin shell:** `frontend/src/components/layouts/admin-layout.tsx` — 290px sidebar (left) + sticky header (top, 64px) + `<main>` content area
+- **Auth shell:** `frontend/src/components/layouts/auth/AuthLayout.tsx` — split panel: navy decorative left + white form right
+- **Sidebar:** Route groups defined in `sidebar-data.ts`. Auto-expands current section. Collapses to overlay on mobile (< 1024px)
+- **Header:** Theme toggle (sun/moon), notification bell with count badge, user avatar with dropdown
+
+### Component Library
+
+All interactive elements come from shadcn/ui in `frontend/src/components/ui/`. **Always use these — never write raw HTML inputs, buttons, tables, or dialogs.**
+
+| Component | Import |
+|---|---|
+| Button | `@/components/ui/button` |
+| Card | `@/components/ui/card` |
+| Input | `@/components/ui/input` |
+| Table | `@/components/ui/table` |
+| Badge | `@/components/ui/badge` |
+| Dialog | `@/components/ui/dialog` |
+| Select | `@/components/ui/select` |
+| Checkbox | `@/components/ui/checkbox` |
+| Tabs | `@/components/ui/tabs` |
+| DropdownMenu | `@/components/ui/dropdown-menu` |
+| Skeleton | `@/components/ui/skeleton` |
+| Separator | `@/components/ui/separator` |
+
+### Page Templates
+
+Reference existing pages as starting points:
+- Tables → `frontend/src/app/(dashboard)/tables/page.tsx`
+- Forms → `frontend/src/app/(dashboard)/forms/page.tsx`
+- Charts → `frontend/src/app/(dashboard)/charts/page.tsx`
+- UI Elements → `frontend/src/app/(dashboard)/ui-elements/page.tsx`
+- Settings → `frontend/src/app/(dashboard)/settings/page.tsx`
+- Auth → `frontend/src/app/(auth)/sign-in/page.tsx`
+
+### Color Rules
+
+- **Background is always white** (`bg-background`) — no dark backgrounds in light mode
+- **Lime green is the single dominant accent** — use for CTAs and the most important element per page
+- **Navy is for hierarchy** — headings, key labels
+- **Shadows on ALL cards and shapes** — never flat. Use `shadow-card` on every Card
+- **Rounded corners on everything** — use `rounded-lg` (0.3rem) for cards, `rounded-md` for buttons and inputs
+- Never use cyan or warm-neutral backgrounds
+
+### Typography
+
+- **Poppins** for everything — headings, body, labels, pills, stats
+- Heading sizes: 24-32px (H1), 16-20px (H2)
+- Body text: 13px, `text-muted-foreground` for secondary text
+- Captions: 10px, `text-muted-foreground`
+- KPI numbers: large (2xl-4xl), bold, `text-foreground`
+
+### Dark Mode
+
+Always supported via `.dark` class (from `next-themes`). Dark bg = `#0F1E3D`, text = `#777777`. All shadcn/ui components auto-adapt via CSS variables. Use the `ThemeToggle` component from the header.
+
+### Tapway Brand
+
+The full brand guide is at `docs/brand-guidelines.md`. Key points for UI:
+- Logo: `frontend/public/tapway-logo.png` — use the `Logo` component from `@/components/logo`
+- "an ITMAX subsidiary" descriptor in light grey below or beside logo where context requires
+- Never recolour the logo or make custom variants
+- Never use the ITMAX logo — only the Tapway logo
 
 ---
 
