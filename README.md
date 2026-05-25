@@ -1,8 +1,10 @@
 # Tapway Claude Template
 
-> A complete AI-assisted development workflow. Clone this repo, then follow
-> the steps below — from idea to production — using Claude Code's built-in
-> skills and slash commands.
+> A complete AI-assisted development workflow powered by the **tapway-superpowers** Claude Code plugin. 12 skills, 5 guardrail hooks, slash commands, and specialized subagents — all auto-installed on clone.
+
+**New to this?** Read the full guide: [docs/superpowers-guide.md](docs/superpowers-guide.md)
+
+**Already have a project?** [Add superpowers to an existing repo](docs/superpowers-guide.md#quick-start-existing-repos)
 
 ---
 
@@ -179,6 +181,8 @@ use `systematic-debugging` to investigate:
 | `/review` | Self-review your current changes before a PR |
 | `/deploy` | Pre-deployment checklist before shipping |
 | `/test-all` | Run all tests and report results |
+| `/release <patch\|minor\|major>` | Bump semver, generate release notes, tag a release |
+| `/upgrade-skills` | Update all plugins to latest versions |
 | `/new-feature` | Start the full 8-step workflow for a new feature |
 
 ### Auto-Triggered Skills
@@ -200,12 +204,15 @@ use `systematic-debugging` to investigate:
 | Path | Purpose |
 |---|---|
 | `CLAUDE.md` | Source of truth — conventions, stack, open items |
-| `.claude/` | Claude Code config — hooks, commands, skills |
-| `.claude/skills/` | AI skills (brainstorming, TDD, code review, cleanup, etc.) |
+| `.claude/` | Claude Code config — settings.json, slash commands |
+| `.claude/settings.json` | Plugin declarations, permissions, env defaults |
+| `.claude/commands/` | Slash command definitions |
 | `backend/` | Python FastAPI + Granian + SQLAlchemy |
 | `frontend/` | Next.js 14 + TypeScript + Tailwind |
-| `docs/` | Architecture, schemas, workflows, deployment docs |
-| `agents/` | Specialized subagent definitions |
+| `docs/` | Architecture, schemas, workflows, [superpowers guide](docs/superpowers-guide.md) |
+| `plugins/` | Local plugin overrides (optional) |
+
+> **Skills, hooks, and agents are now served by the `tapway-superpowers` plugin** — not stored locally in `.claude/`. This means they update automatically via `/upgrade-skills`. See the [full guide](docs/superpowers-guide.md).
 
 ---
 

@@ -65,8 +65,7 @@ def create_app() -> FastAPI:
     app.include_router(health.router, prefix="/api/v1", tags=["health"])
 
     # Add your feature routers here:
-    # from src.api.routes import auth
-    # app.include_router(auth.router, prefix="/api/v1/auth", tags=["auth"])
+    # app.include_router(your_router, prefix="/api/v1/...")
 
     return app
 
