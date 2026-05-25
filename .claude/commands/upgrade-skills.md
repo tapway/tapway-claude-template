@@ -1,8 +1,4 @@
----
-description: "Update all Claude Code plugins and marketplaces to latest versions"
----
-
-# /upgrade-skills
+# /upgrade-skills — Update All Plugins and Marketplaces
 
 Update all installed Claude Code plugins and their marketplaces to the latest versions. Use this when you want to pull in improvements to skills, agents, or hooks.
 

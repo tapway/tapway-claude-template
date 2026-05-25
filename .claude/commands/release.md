@@ -1,9 +1,4 @@
----
-description: "Bump version, generate release notes, and tag a release"
-argument-hint: "<patch|minor|major>"
----
-
-# /release
+# /release — Bump Version, Generate Release Notes, and Tag a Release
 
 Bump the project version (semver), generate release notes from unreleased changes, and create a git tag.
 
