@@ -30,6 +30,8 @@ Narrow down where the bug lives:
 - Add logging/print statements at key points to trace the execution path
 - Check: does it happen with a minimal input? Which inputs trigger it vs don't?
 
+**Name your confusion (Karpathy):** Before forming hypotheses, articulate what's unclear. What about this bug surprises you? What assumption are you making that might be wrong? If something feels off, say so explicitly — don't just move to the next hypothesis.
+
 ### Step 3: Hypothesize
 Form at least 2 hypotheses about the root cause. For each:
 - What evidence supports this hypothesis?
@@ -46,6 +48,7 @@ Test the most likely hypothesis first:
 Implement the minimal fix. Don't refactor while fixing.
 - The failing test from Step 1 should now pass
 - Run the full test suite — no regressions
+- **Surgical fix rule (Karpathy):** Touch only the code that causes the bug. No "while I'm here" improvements to neighboring code. No error handling for states the fix doesn't introduce. The diff should tell a one-sentence story.
 
 ### Step 6: Post-mortem (for significant bugs)
 For bugs that took >30 min or affected users:

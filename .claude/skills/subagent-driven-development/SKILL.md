@@ -37,9 +37,14 @@ You are implementing Task N of the [Feature] plan.
 
 TASK: [exact task description from plan]
 FILES TO MODIFY: [list]
+SUCCESS CRITERIA: [verifiable — "test_X passes", "ruff is clean", "endpoint returns 201"]
 RELEVANT CONTEXT: [paste only what's needed — don't point to plan file]
 REQUIRED SKILLS: tdd
 CONVENTIONS: [key items from CLAUDE.md]
+
+SURGICAL CHANGES: Touch only the files listed above. No neighboring-code fixes.
+No unrelated refactors. No error handling for impossible states.
+If the test doesn't need it, don't write it.
 
 Do not implement more than this task. Stop after the commit.
 ```
@@ -55,6 +60,7 @@ After the implementer reports done, review:
 - Does the code match every requirement in the task spec?
 - Are all tests written and passing?
 - No incomplete implementations?
+- **Surgical changes check:** Did the agent touch only the listed files? Flag any out-of-scope changes — reject them even if they seem like improvements
 
 **Step 4: Code Quality Review**
 Invoke the `code-review` skill and check:

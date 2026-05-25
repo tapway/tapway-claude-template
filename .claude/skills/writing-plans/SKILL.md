@@ -29,6 +29,14 @@ Every plan starts with:
 **Tech stack:** Next.js 14 + TypeScript / Python FastAPI
 **Related skills needed:** tdd, subagent-driven-development
 **Estimated tasks:** N
+
+### Assumptions
+- [Assumption 1 — if wrong, the plan changes]
+- [Assumption 2]
+
+### Simpler Alternative Considered
+[What's the simplest thing that could work? Why wasn't it chosen? If the
+chosen approach IS the simplest, say so explicitly.]
 ```
 
 ### 2. File Map
@@ -50,6 +58,7 @@ Each task = one commit. Format:
 ```
 ### Task N: [Task name]
 **Files:** [file1.py, file2.ts]
+**Success criteria:** [verifiable — "test_X passes", "ruff is clean on file1.py", "endpoint returns 201 on valid input"]
 **Steps:**
 1. Write test: `test_[what]_[when]_[expected]`
 2. Verify test fails (expected failure message: ...)
@@ -59,6 +68,8 @@ Each task = one commit. Format:
 ```
 
 Tasks should be 2-5 minutes of work each. If longer, split it.
+
+**Surgical changes rule:** Each task touches only the files listed. No fixing neighboring code, no unrelated refactors, no style "improvements" to unchanged files.
 
 ### 4. No Placeholders Rule
 Never write:

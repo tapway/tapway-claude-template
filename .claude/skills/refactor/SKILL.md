@@ -19,6 +19,8 @@ description: >
 2. **Small steps** — one change at a time, tests pass after each step
 3. **No behavior change** — refactoring must not change what the code does
 4. **Commit often** — commit after each successful refactor step
+5. **Surgical changes (Karpathy):** Touch only what the refactor targets. Don't improve neighboring code, comments, or formatting. Every changed line must trace directly to the refactor goal. Remove only the dead code your changes created — leave pre-existing dead code alone.
+6. **Simplicity litmus:** After refactoring, ask: would a senior engineer call this overcomplicated? If the refactor added more lines than it removed, question whether it was worth it.
 
 ---
 

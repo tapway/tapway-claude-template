@@ -45,9 +45,11 @@ description: >
 - [ ] Functions < 50 lines; files < 300 lines
 - [ ] Tests cover the happy path AND the key error paths
 - [ ] Naming is clear — no abbreviations, no `data`, `stuff`, `temp`
+- [ ] **No scope creep (Karpathy):** Every changed line traces to the stated goal. Flag changes to files or logic outside the PR's scope — even if they seem like improvements
+- [ ] **No unnecessary abstractions:** Don't extract single-use code into helpers, don't add flexibility that isn't needed yet
 
 ### 🔵 Suggestions (nice to have)
-- [ ] Could this be simpler?
+- [ ] **Simplicity check:** Could this be shorter? If 200 lines can become 50, say so
 - [ ] Is there a reusable utility here?
 - [ ] Missing docstring on public function?
 - [ ] Would a type alias make this more readable?

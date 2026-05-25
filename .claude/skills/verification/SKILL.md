@@ -16,6 +16,8 @@ description: >
 ## The Rule
 
 > A task is not done when the code is written. A task is done when it is verified.
+>
+> **Loop until green (Karpathy):** If verification fails, fix the issues and re-verify. Don't just report failure — resolve it. Strong success criteria let you loop independently without asking the user "now what?"
 
 ---
 
@@ -64,6 +66,7 @@ If anything fails:
 ```
 Status: INCOMPLETE ❌
 Blockers: [list what failed and why]
+Next: [specific fix for each blocker — then re-verify]
 ```
 
 ---

@@ -36,8 +36,13 @@ REFACTOR → Improve the code without changing behavior. Tests must still pass.
 ### GREEN Phase
 1. Write the **minimum** code to make the test pass
 2. No gold-plating. No "while I'm here" additions.
-3. Run the test. Confirm it passes.
-4. Run the full test suite. Confirm no regressions.
+3. **Simplicity rules (Karpathy):**
+   - If the test doesn't need it, don't write it
+   - No error handling for states that cannot occur
+   - No abstractions for single-use code — extract only on the second duplication
+   - **Litmus test:** would a senior engineer call this overcomplicated? If yes, simplify
+4. Run the test. Confirm it passes.
+5. Run the full test suite. Confirm no regressions.
 
 ### REFACTOR Phase
 1. Is the code readable? Are names clear?
