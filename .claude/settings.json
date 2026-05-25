@@ -1,7 +1,8 @@
 {
   "enabledPlugins": {
     "andrej-karpathy-skills@karpathy-skills": true,
-    "claude-code-setup@claude-plugins-official": true
+    "claude-code-setup@claude-plugins-official": true,
+    "tapway-superpowers@tapway-superpowers": true
   },
   "extraKnownMarketplaces": {
     "karpathy-skills": {
@@ -9,6 +10,12 @@
         "source": "git",
         "repo": "forrestchang/andrej-karpathy-skills",
         "url": "https://github.com/multica-ai/andrej-karpathy-skills.git"
+      }
+    },
+    "tapway-superpowers": {
+      "source": {
+        "source": "git",
+        "url": "https://github.com/tapway/tapway-superpowers.git"
       }
     }
   },
@@ -44,51 +51,10 @@
       "Bash(curl * | bash *)"
     ]
   },
-  "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": ".claude/hooks/pre-bash-safety.sh"
-          }
-        ]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": ".claude/hooks/post-write-lint.sh"
-          }
-        ]
-      },
-      {
-        "matcher": "Edit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": ".claude/hooks/post-write-lint.sh"
-          }
-        ]
-      }
-    ],
-    "SessionStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": ".claude/hooks/session-start.sh"
-          }
-        ]
-      }
-    ]
-  },
+  "hooks": {},
   "env": {
     "MAX_THINKING_TOKENS": "10000",
-    "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "70"
+    "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "70",
+    "ALLOW_PROD": "0"
   }
 }

@@ -142,10 +142,61 @@ structlog.contextvars.clear_contextvars()
 - All images include HEALTHCHECK polling `GET /api/v1/health`
 
 ### Git Workflow
-- **Branch strategy:** `main` (prod) → `develop` → `feat/xxx`, `fix/xxx`, `chore/xxx`
-- **Never commit directly to `main`**
-- **Commit format:** `feat: add user auth`, `fix: null pointer in payment`
+- **Branch strategy:** `main` (prod) → `feat/xxx`, `fix/xxx`, `chore/xxx`
+- **Never commit directly to `main`** — the pre-bash safety hook blocks it. Create a feature branch for every change:
+  ```bash
+  git checkout -b feat/<feature-name>   # new feature
+  git checkout -b fix/<bug-name>        # bug fix
+  git checkout -b chore/<task-name>     # cleanup, deps, config
+  ```
+- **Commit format:** conventional commits — `feat: add user auth`, `fix: null pointer in payment`, `chore: update dependencies`
 - Run `make lint && make test` before every PR
+
+### Environment Safety
+- **Prod operations are guarded by the pre-bash safety hook.** Any command containing `DATABASE_URL.*prod`, `docker compose.*production`, or `--production` is blocked
+- **To run prod operations:** set `ALLOW_PROD=1` before the command:
+  ```bash
+  ALLOW_PROD=1 docker compose -f docker-compose.production.yml up
+  ```
+- This is intentionally inconvenient — you should rarely need it during development
+- `.env` files must never contain production credentials; use `.env.local` (gitignored) for local overrides
+
+### Release Workflow
+Every conventional commit appends a line to `CHANGELOG.unreleased.md` automatically via the post-commit hook. To cut a release:
+```
+/release patch    # 0.1.0 → 0.1.1 (bug fixes)
+/release minor    # 0.1.0 → 0.2.0 (new features)
+/release major    # 0.1.0 → 1.0.0 (breaking changes)
+```
+This bumps the version in `VERSION`, collates unreleased notes into `CHANGELOG.md`, creates a git tag, and resets the unreleased log.
+
+### Upgrading Plugins/Skills
+Skills, agents, and hooks come from installed plugins — not local files. To upgrade:
+```
+/upgrade-skills
+```
+This updates all marketplace catalogs and plugins to their latest versions. Restart Claude Code after updating.
+
+Manual equivalent:
+```bash
+claude plugin marketplace update
+claude plugin update tapway-superpowers@tapway
+```
+
+### Adding Superpowers to an Existing Repo
+If you have an existing repo that wasn't initialized from this template:
+```bash
+# 1. Register the Tapway marketplace
+claude plugin marketplace add https://github.com/tapway/tapway-superpowers
+
+# 2. Install the superpowers plugin
+claude plugin install tapway-superpowers@tapway
+
+# 3. (Optional) Install companion plugins
+claude plugin install andrej-karpathy-skills@karpathy-skills
+claude plugin install claude-code-setup@claude-plugins-official
+```
+Skills and hooks activate immediately. For permissions and env settings, copy the relevant sections from this template's `.claude/settings.json`.
 
 ### API Design
 - All routes versioned under `/api/v1/`
@@ -213,7 +264,7 @@ npm run lint         # ESLint + TypeScript check
 | `repo-docs` | Generating the standardized `docs/` folder (architecture, schema, deployment) at end of project |
 | `pre-review-cleanup` | Removing template artifacts before code review |
 
-**Triggering a skill:** these activate automatically when a relevant phrase appears in conversation, and can also be invoked explicitly via the Skill tool by name. For example, `repo-docs` fires on *"document this repo"*, *"write architecture docs"*, *"/docs"*, or *"generate docs for this project"*. Skill files live in `.claude/skills/<name>/SKILL.md` — each carries YAML frontmatter (`name`, `description`) used for auto-discovery.
+**Triggering a skill:** these activate automatically when a relevant phrase appears in conversation, and can also be invoked explicitly via the Skill tool by name. All skills are provided by the `tapway-superpowers` plugin — they are not stored locally in `.claude/skills/`. Run `/upgrade-skills` to pull the latest versions.
 
 ---
 
